@@ -2,8 +2,18 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import sqlite3
 from starlette.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
+
 
 app = FastAPI()
+origins =["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app.mount("/ui", StaticFiles(directory="ui", html=True), name="site")
 
 
@@ -19,7 +29,7 @@ async def test():
 
 @app.post("/createDB/")
 async def createDB():
-    dropDB()
+    # dropDB()
     createDB()
     return {"message": "DB created"}
 
